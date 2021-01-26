@@ -92,6 +92,9 @@ def remove_from_cart():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# To dump
+# rf = RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth)
+# joblib.dump(rf, "model_rfr.bin")
 
 model = joblib.load("model_rfr.bin")
 
