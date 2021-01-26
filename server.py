@@ -1,4 +1,6 @@
+from datetime import timedelta
 from flask import Flask, request, jsonify
+import joblib
 
 app = Flask(__name__)
 
@@ -89,3 +91,17 @@ def remove_from_cart():
         return jsonify({'error': "Product not found."}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+model = joblib.load("model_rfr.bin")
+
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    body = request.get_json()
+    features = body.get("features")
+    prediction = model.predict([features])
+
+    return "{}".format(str(timedelta(seconds=prediction[0])))
+
+# requests.post("http://127.0.0.1:5000/predict", json={"features": [1, 2, 3, 4, 5, 6]}, headers=headers).content
